@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Applications - HireHub</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+</head>
+
+
+<body class="bg-light">
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar navbar-dark bg-dark">
+
+    <div class="container">
+
+        <a
+            class="navbar-brand"
+            href="{{ url_for('dashboard') }}">
+
+            HireHub Admin
+
+        </a>
+
+
+        <div class="d-flex align-items-center">
+
+            <span class="text-white me-3">
+
+                👑 Welcome, {{ session["name"] }}
+
+            </span>
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="btn btn-outline-light me-2">
+
+                Dashboard
+
+            </a>
+
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="btn btn-danger">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="container mt-5">
+
+
+    <!-- FLASH MESSAGES -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="alert alert-{{ category }}">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+
+    <!-- TITLE -->
+
+    <div class="mb-4">
+
+        <h2>📄 Manage Applications</h2>
+
+        <p class="text-muted">
+
+            View all job applications submitted on HireHub.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- APPLICATIONS TABLE -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+
+                <table
+                    class="table table-bordered table-hover align-middle">
+
+
+                    <!-- TABLE HEADER -->
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>Application ID</th>
+
+                            <th>Job</th>
+
+                            <th>Freelancer</th>
+
+                            <th>Client</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <!-- TABLE BODY -->
+
+                    <tbody>
+
+
+                        {% if applications %}
+
+
+                            {% for application in applications %}
+
+                            <tr>
+
+
+                                <!-- APPLICATION ID -->
+
+                                <td>
+
+                                    {{ application.application_id }}
+
+                                </td>
+
+
+
+                                <!-- JOB -->
+
+                                <td>
+
+                                    <strong>
+
+                                        {{ application.job_title }}
+
+                                    </strong>
+
+                                    <br>
+
+                                    <small class="text-muted">
+
+                                        Job ID: {{ application.job_id }}
+
+                                    </small>
+
+                                </td>
+
+
+
+                                <!-- FREELANCER -->
+
+                                <td>
+
+                                    <strong>
+
+                                        {{ application.freelancer_name }}
+
+                                    </strong>
+
+                                    <br>
+
+                                    <small class="text-muted">
+
+                                        {{ application.freelancer_email }}
+
+                                    </small>
+
+                                </td>
+
+
+
+                                <!-- CLIENT -->
+
+                                <td>
+
+                                    <strong>
+
+                                        {{ application.client_name }}
+
+                                    </strong>
+
+                                    <br>
+
+                                    <small class="text-muted">
+
+                                        {{ application.client_email }}
+
+                                    </small>
+
+                                </td>
+
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+
+                                    {% if application.status == "Pending" %}
+
+                                        <span
+                                            class="badge bg-warning text-dark">
+
+                                            Pending
+
+                                        </span>
+
+
+                                    {% elif application.status == "Accepted" %}
+
+                                        <span
+                                            class="badge bg-success">
+
+                                            Accepted
+
+                                        </span>
+
+
+                                    {% elif application.status == "Rejected" %}
+
+                                        <span
+                                            class="badge bg-danger">
+
+                                            Rejected
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span
+                                            class="badge bg-secondary">
+
+                                            {{ application.status }}
+
+                                        </span>
+
+                                    {% endif %}
+
+
+                                </td>
+
+
+                            </tr>
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="text-center text-muted">
+
+                                    No applications found.
+
+                                </td>
+
+                            </tr>
+
+
+                        {% endif %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

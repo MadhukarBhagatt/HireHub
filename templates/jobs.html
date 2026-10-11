@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Find Jobs - HireHub</title>
+
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+
+    <!-- HireHub CSS -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}">
+
+
+    <style>
+
+        body {
+            background: #f5f7fb;
+        }
+
+
+        /* PAGE HEADER */
+
+        .jobs-header {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            padding: 45px 0;
+            margin-bottom: 35px;
+        }
+
+
+        /* FILTER CARD */
+
+        .filter-card {
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+
+        /* JOB CARD */
+
+        .job-card {
+            border: none;
+            border-radius: 16px;
+            transition: 0.25s;
+            overflow: hidden;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+
+
+        .job-title {
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+
+        .job-description {
+            color: #6b7280;
+        }
+
+
+        .job-info {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+
+        .search-btn {
+            font-weight: 600;
+        }
+
+
+        .apply-btn {
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+
+
+        .form-control,
+        .form-select {
+            padding: 11px;
+            border-radius: 8px;
+        }
+
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.15);
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar navbar-dark bg-dark">
+
+    <div class="container">
+
+
+        <a
+            class="navbar-brand fw-bold"
+            href="{{ url_for('home') }}">
+
+            💼 HireHub
+
+        </a>
+
+
+        <div class="d-flex align-items-center">
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="btn btn-outline-light me-2">
+
+                Dashboard
+
+            </a>
+
+
+            <a
+                href="{{ url_for('my_applications') }}"
+                class="btn btn-info me-2">
+
+                📄 My Applications
+
+            </a>
+
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="btn btn-danger">
+
+                Logout
+
+            </a>
+
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================
+     PAGE HEADER
+========================= -->
+
+<section class="jobs-header">
+
+    <div class="container text-center">
+
+
+        <h1 class="fw-bold">
+
+            🔍 Find Your Next Opportunity
+
+        </h1>
+
+
+        <p class="fs-5 mb-0">
+
+            Discover jobs that match your skills and interests.
+
+        </p>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="container pb-5">
+
+
+    <!-- =========================
+         FLASH MESSAGES
+    ========================= -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="alert alert-{{ category }}">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+
+    <!-- =========================
+         SEARCH & FILTER
+    ========================= -->
+
+    <div class="card filter-card mb-5">
+
+        <div class="card-body p-4">
+
+
+            <h4 class="mb-4">
+
+                🔎 Search & Filter Jobs
+
+            </h4>
+
+
+            <form
+                method="GET"
+                action="{{ url_for('jobs') }}">
+
+
+                <div class="row g-3">
+
+
+                    <!-- SEARCH JOB -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Job Title
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="search"
+                            class="form-control"
+                            placeholder="Web Developer"
+                            value="{{ search }}">
+
+                    </div>
+
+
+
+                    <!-- SKILLS -->
+
+                    <div class="col-md-2">
+
+                        <label class="form-label fw-semibold">
+
+                            Skills
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="skill"
+                            class="form-control"
+                            placeholder="Python"
+                            value="{{ skill }}">
+
+                    </div>
+
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="col-md-2">
+
+                        <label class="form-label fw-semibold">
+
+                            Category
+
+                        </label>
+
+
+                        <select
+                            name="category"
+                            class="form-select">
+
+
+                            <option value="">
+
+                                All Categories
+
+                            </option>
+
+
+                            <option
+                                value="Web Development"
+                                {% if category == "Web Development" %}selected{% endif %}>
+
+                                Web Development
+
+                            </option>
+
+
+                            <option
+                                value="Mobile Development"
+                                {% if category == "Mobile Development" %}selected{% endif %}>
+
+                                Mobile Development
+
+                            </option>
+
+
+                            <option
+                                value="Graphic Design"
+                                {% if category == "Graphic Design" %}selected{% endif %}>
+
+                                Graphic Design
+
+                            </option>
+
+
+                            <option
+                                value="UI/UX Design"
+                                {% if category == "UI/UX Design" %}selected{% endif %}>
+
+                                UI/UX Design
+
+                            </option>
+
+
+                            <option
+                                value="Content Writing"
+                                {% if category == "Content Writing" %}selected{% endif %}>
+
+                                Content Writing
+
+                            </option>
+
+
+                            <option
+                                value="Digital Marketing"
+                                {% if category == "Digital Marketing" %}selected{% endif %}>
+
+                                Digital Marketing
+
+                            </option>
+
+
+                            <option
+                                value="Data Entry"
+                                {% if category == "Data Entry" %}selected{% endif %}>
+
+                                Data Entry
+
+                            </option>
+
+
+                            <option
+                                value="Data Analysis"
+                                {% if category == "Data Analysis" %}selected{% endif %}>
+
+                                Data Analysis
+
+                            </option>
+
+
+                            <option
+                                value="Video Editing"
+                                {% if category == "Video Editing" %}selected{% endif %}>
+
+                                Video Editing
+
+                            </option>
+
+
+                            <option
+                                value="Other"
+                                {% if category == "Other" %}selected{% endif %}>
+
+                                Other
+
+                            </option>
+
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- STATUS -->
+
+                    <div class="col-md-2">
+
+                        <label class="form-label fw-semibold">
+
+                            Job Status
+
+                        </label>
+
+
+                        <select
+                            name="status"
+                            class="form-select">
+
+
+                            <option value="">
+
+                                All Jobs
+
+                            </option>
+
+
+                            <option
+                                value="Open"
+                                {% if status == "Open" %}selected{% endif %}>
+
+                                🟢 Open
+
+                            </option>
+
+
+                            <option
+                                value="Closed"
+                                {% if status == "Closed" %}selected{% endif %}>
+
+                                🔒 Closed
+
+                            </option>
+
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- BUTTONS -->
+
+                    <div
+                        class="col-md-3 d-flex align-items-end gap-2">
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary search-btn">
+
+                            🔍 Search
+
+                        </button>
+
+
+                        <a
+                            href="{{ url_for('jobs') }}"
+                            class="btn btn-outline-secondary">
+
+                            Clear
+
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         RESULTS HEADER
+    ========================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+
+        <div>
+
+            <h3 class="mb-1">
+
+                Available Jobs
+
+            </h3>
+
+
+            <p class="text-muted mb-0">
+
+                {{ jobs|length }} job(s) found
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         JOB CARDS
+    ========================= -->
+
+    <div class="row">
+
+
+        {% if jobs %}
+
+
+            {% for job in jobs %}
+
+
+                <div class="col-lg-6 mb-4">
+
+
+                    <div class="card job-card h-100">
+
+
+                        <div class="card-body p-4">
+
+
+                            <!-- TITLE + STATUS -->
+
+                            <div
+                                class="d-flex justify-content-between align-items-start mb-3">
+
+
+                                <h4 class="job-title mb-0">
+
+                                    {{ job.title }}
+
+                                </h4>
+
+
+                                {% if job.status == "Open" %}
+
+                                    <span class="badge bg-success">
+
+                                        🟢 Open
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-secondary">
+
+                                        🔒 Closed
+
+                                    </span>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+
+                            <!-- CATEGORY -->
+
+                            <span class="badge bg-info text-dark mb-3">
+
+                                {{ job.category or "Other" }}
+
+                            </span>
+
+
+
+                            <!-- CLIENT -->
+
+                            <p class="text-muted mb-3">
+
+                                🏢 Posted by
+
+                                <strong>
+
+                                    {{ job.client_name }}
+
+                                </strong>
+
+                            </p>
+
+
+                            <a
+                                href="{{ url_for(
+                                    'view_client',
+                                    user_id=job.client_id
+                                ) }}"
+                                class="btn btn-outline-primary btn-sm mb-3">
+
+                                View Client Profile
+
+                            </a>
+
+
+
+                            <!-- DESCRIPTION -->
+
+                            <p class="job-description">
+
+                                {{ job.description }}
+
+                            </p>
+
+
+
+                            <!-- JOB INFORMATION -->
+
+                            <div class="job-info mb-3">
+
+
+                                <div class="row">
+
+
+                                    <div class="col-md-6 mb-2">
+
+                                        <strong>
+
+                                            🛠 Skills
+
+                                        </strong>
+
+                                        <br>
+
+                                        {{ job.skills }}
+
+                                    </div>
+
+
+                                    <div class="col-md-6 mb-2">
+
+                                        <strong>
+
+                                            💰 Budget
+
+                                        </strong>
+
+                                        <br>
+
+                                        ₹{{ job.budget }}
+
+                                    </div>
+
+
+                                    <div class="col-md-12">
+
+                                        <strong>
+
+                                            📅 Deadline
+
+                                        </strong>
+
+                                        <br>
+
+                                        {{ job.deadline }}
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <!-- ACTION -->
+
+                            {% if session.get("role") == "freelancer" %}
+
+
+                                {% if job.status == "Open" %}
+
+
+                                    <form
+                                        action="{{ url_for(
+                                            'apply_job',
+                                            job_id=job.id
+                                        ) }}"
+                                        method="POST">
+
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-success apply-btn w-100">
+
+                                            🚀 Apply for This Job
+
+                                        </button>
+
+
+                                    </form>
+
+
+                                {% else %}
+
+
+                                    <button
+                                        class="btn btn-secondary w-100"
+                                        disabled>
+
+                                        🔒 This Job is Closed
+
+                                    </button>
+
+
+                                {% endif %}
+
+
+                            {% endif %}
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            {% endfor %}
+
+
+
+        {% else %}
+
+
+            <!-- NO JOBS -->
+
+            <div class="col-12">
+
+
+                <div class="card border-0 shadow-sm text-center p-5">
+
+
+                    <div class="fs-1 mb-3">
+
+                        🔍
+
+                    </div>
+
+
+                    <h4>
+
+                        No Jobs Found
+
+                    </h4>
+
+
+                    <p class="text-muted">
+
+                        Try changing your search keywords or filters.
+
+                    </p>
+
+
+                    <div>
+
+                        <a
+                            href="{{ url_for('jobs') }}"
+                            class="btn btn-primary">
+
+                            View All Jobs
+
+                        </a>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+
+<!-- Bootstrap JavaScript -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Applications - HireHub</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <style>
+
+        body {
+            background-color: #f5f7fb;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .page-title {
+            margin-top: 40px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .application-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: 0.2s;
+        }
+
+        .application-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .job-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .status-badge {
+            font-size: 15px;
+            padding: 8px 14px;
+            border-radius: 20px;
+        }
+
+        .empty-message {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn {
+            border-radius: 8px;
+        }
+
+        .review-btn {
+            background: #ffc107;
+            color: #000;
+            border: none;
+        }
+
+        .review-btn:hover {
+            background: #e0a800;
+            color: #000;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <div class="container">
+
+        <a
+            class="navbar-brand"
+            href="{{ url_for('home') }}">
+
+            💼 HireHub
+
+        </a>
+
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <div
+            class="collapse navbar-collapse"
+            id="navbarNav">
+
+            <ul class="navbar-nav ms-auto">
+
+
+                <!-- DASHBOARD -->
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="{{ url_for('dashboard') }}">
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+
+                <!-- CLIENT NAVIGATION -->
+
+                {% if session.get("role") == "client" %}
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="{{ url_for('post_job') }}">
+
+                        Post Job
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link active"
+                        href="{{ url_for('my_applications') }}">
+
+                        Applications
+
+                    </a>
+
+                </li>
+
+                {% endif %}
+
+
+                <!-- FREELANCER NAVIGATION -->
+
+                {% if session.get("role") == "freelancer" %}
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="{{ url_for('jobs') }}">
+
+                        Find Jobs
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link active"
+                        href="{{ url_for('my_applications') }}">
+
+                        My Applications
+
+                    </a>
+
+                </li>
+
+                {% endif %}
+
+
+                <!-- LOGOUT -->
+
+                <li class="nav-item">
+
+                    <a
+                        class="nav-link"
+                        href="{{ url_for('logout') }}">
+
+                        Logout
+
+                    </a>
+
+                </li>
+
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="container">
+
+
+    <h1 class="page-title">
+
+        {% if session.get("role") == "client" %}
+
+            📄 Applications Received
+
+        {% else %}
+
+            📄 My Applications
+
+        {% endif %}
+
+    </h1>
+
+
+
+    <!-- =========================
+         FLASH MESSAGES
+    ========================= -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div
+                    class="alert alert-{{ category }} alert-dismissible fade show"
+                    role="alert">
+
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+
+    <!-- =========================
+         APPLICATIONS
+    ========================= -->
+
+    {% if applications %}
+
+
+        {% for application in applications %}
+
+
+        <div class="application-card">
+
+
+            <!-- =========================
+                 JOB TITLE
+            ========================= -->
+
+            <div class="job-title">
+
+                💼 {{ application.job_title }}
+
+            </div>
+
+
+
+            <!-- =========================
+                 CLIENT VIEW
+            ========================= -->
+
+            {% if session.get("role") == "client" %}
+
+
+                <p>
+
+                    <strong>👤 Freelancer:</strong>
+
+                    {{ application.freelancer_name }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>📧 Email:</strong>
+
+                    {{ application.freelancer_email }}
+
+                </p>
+
+
+                <a
+                    href="{{ url_for(
+                        'view_freelancer',
+                        user_id=application.freelancer_id
+                    ) }}"
+                    class="btn btn-outline-primary btn-sm">
+
+                    👤 View Freelancer Profile
+
+                </a>
+
+
+            {% endif %}
+
+
+
+            <!-- =========================
+                 FREELANCER VIEW
+            ========================= -->
+
+            {% if session.get("role") == "freelancer" %}
+
+
+                <p>
+
+                    <strong>🏢 Client:</strong>
+
+                    {{ application.client_name }}
+
+                </p>
+
+
+            {% endif %}
+
+
+
+            <hr>
+
+
+
+            <!-- =========================
+                 APPLICATION STATUS
+            ========================= -->
+
+            <div class="mb-3">
+
+                <strong>Status:</strong>
+
+
+                {% if application.status == "Pending" %}
+
+                    <span
+                        class="badge bg-warning text-dark status-badge">
+
+                        ⏳ Pending
+
+                    </span>
+
+
+                {% elif application.status == "Accepted" %}
+
+                    <span
+                        class="badge bg-success status-badge">
+
+                        ✓ Accepted
+
+                    </span>
+
+
+                {% elif application.status == "Rejected" %}
+
+                    <span
+                        class="badge bg-danger status-badge">
+
+                        ✗ Rejected
+
+                    </span>
+
+
+                {% else %}
+
+                    <span
+                        class="badge bg-secondary status-badge">
+
+                        {{ application.status }}
+
+                    </span>
+
+                {% endif %}
+
+
+            </div>
+
+
+
+            <!-- =========================
+                 CLIENT ACTIONS
+            ========================= -->
+
+            {% if session.get("role") == "client" %}
+
+
+                {% if application.status == "Pending" %}
+
+                    <div class="d-flex gap-2 mt-3">
+
+
+                        <!-- ACCEPT -->
+
+                        <form
+                            action="{{ url_for(
+                                'accept_application',
+                                application_id=application.application_id
+                            ) }}"
+                            method="POST">
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-success">
+
+                                ✓ Accept Freelancer
+
+                            </button>
+
+
+                        </form>
+
+
+
+                        <!-- REJECT -->
+
+                        <form
+                            action="{{ url_for(
+                                'reject_application',
+                                application_id=application.application_id
+                            ) }}"
+                            method="POST">
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger">
+
+                                ✗ Reject
+
+                            </button>
+
+
+                        </form>
+
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- =========================
+                     RATE & REVIEW
+                ========================= -->
+
+                {% if application.status == "Accepted" %}
+
+                    <div class="alert alert-success mt-3">
+
+                        🎉 This freelancer has been accepted for your job.
+
+                    </div>
+
+
+                    <div class="mt-3">
+
+                        <a
+                            href="{{ url_for(
+                                'review_freelancer',
+                                job_id=application.job_id,
+                                freelancer_id=application.freelancer_id
+                            ) }}"
+                            class="btn review-btn">
+
+                            ⭐ Rate & Review Freelancer
+
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+
+            {% endif %}
+
+
+
+            <!-- =========================
+                 FREELANCER STATUS MESSAGE
+            ========================= -->
+
+            {% if session.get("role") == "freelancer" %}
+
+
+                {% if application.status == "Pending" %}
+
+                    <div
+                        class="alert alert-warning mt-3 mb-0">
+
+                        ⏳ Your application is waiting for the client.
+
+                    </div>
+
+
+                {% elif application.status == "Accepted" %}
+
+                    <div
+                        class="alert alert-success mt-3 mb-0">
+
+                        🎉 Congratulations! Your application has been accepted.
+
+                    </div>
+
+
+                {% elif application.status == "Rejected" %}
+
+                    <div
+                        class="alert alert-danger mt-3 mb-0">
+
+                        Your application was not selected for this job.
+
+                    </div>
+
+
+                {% endif %}
+
+
+            {% endif %}
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+
+    {% else %}
+
+
+        <!-- =========================
+             NO APPLICATIONS
+        ========================= -->
+
+        <div class="empty-message">
+
+
+            {% if session.get("role") == "client" %}
+
+
+                <h4>
+
+                    📭 No applications received yet.
+
+                </h4>
+
+
+                <p class="text-muted">
+
+                    Applications from freelancers will appear here.
+
+                </p>
+
+
+            {% else %}
+
+
+                <h4>
+
+                    📭 You haven't applied for any jobs yet.
+
+                </h4>
+
+
+                <p class="text-muted">
+
+                    Find a job and submit your application.
+
+                </p>
+
+
+                <a
+                    href="{{ url_for('jobs') }}"
+                    class="btn btn-primary">
+
+                    🔍 Find Jobs
+
+                </a>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+
+<!-- =========================
+     BOOTSTRAP JAVASCRIPT
+========================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>

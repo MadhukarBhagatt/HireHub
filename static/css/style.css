@@ -1,0 +1,1073 @@
+/* =========================================================
+   HIREHUB - GLOBAL STYLES
+========================================================= */
+
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #8b5cf6;
+    --dark: #111827;
+    --text: #374151;
+    --muted: #6b7280;
+    --light: #f8fafc;
+    --border: #e5e7eb;
+    --white: #ffffff;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #0ea5e9;
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--text);
+    background: #ffffff;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c7d2fe;
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+
+/* =========================================================
+   OLD BOOTSTRAP NAVBAR SUPPORT
+========================================================= */
+
+.navbar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    color: var(--primary) !important;
+}
+
+.navbar-nav .nav-link {
+    color: var(--text);
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary);
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+
+/* =========================================================
+   HIREHUB MODERN NAVBAR
+========================================================= */
+
+.hh-navbar {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+}
+
+.hh-nav-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 14px 25px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+/* Logo */
+
+.hh-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    margin-right: auto;
+}
+
+.hh-logo:hover {
+    text-decoration: none;
+}
+
+.hh-logo-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 19px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    box-shadow: 0 7px 18px rgba(99, 102, 241, 0.25);
+}
+
+.hh-logo-text {
+    font-size: 25px;
+    font-weight: 800;
+    color: #111827;
+    letter-spacing: -0.8px;
+}
+
+.hh-logo-text span {
+    color: #6366f1;
+}
+
+
+/* Navigation menu */
+
+.hh-nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.hh-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 12px;
+    color: #4b5563;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+}
+
+.hh-nav-link i {
+    font-size: 16px;
+}
+
+.hh-nav-link:hover {
+    color: #6366f1;
+    background: #eef2ff;
+    transform: translateY(-1px);
+}
+
+
+/* Navigation actions */
+
+.hh-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+
+/* User pill */
+
+.hh-user-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 7px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 30px;
+}
+
+.hh-user-avatar {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 50%;
+    font-size: 13px;
+}
+
+.hh-user-role {
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
+}
+
+
+/* Login button */
+
+.hh-login-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 18px;
+    border: 1.5px solid #6366f1;
+    border-radius: 10px;
+    color: #6366f1;
+    background: white;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.hh-login-btn:hover {
+    color: white;
+    background: #6366f1;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(99, 102, 241, 0.2);
+}
+
+
+/* Register button */
+
+.hh-register-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 19px;
+    border-radius: 10px;
+    color: white;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 7px 18px rgba(99, 102, 241, 0.22);
+    transition: all 0.25s ease;
+}
+
+.hh-register-btn:hover {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 11px 25px rgba(99, 102, 241, 0.3);
+}
+
+
+/* Mobile toggle */
+
+.hh-mobile-toggle {
+    display: none;
+    border: none;
+    background: #eef2ff;
+    color: #6366f1;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.hh-mobile-toggle:hover {
+    background: #e0e7ff;
+}
+
+
+/* =========================================================
+   HERO SECTION
+========================================================= */
+
+.hero {
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.18), transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.15), transparent 30%),
+        linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.08);
+    top: -150px;
+    right: -100px;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: rgba(139, 92, 246, 0.08);
+    bottom: -120px;
+    left: -100px;
+}
+
+.hero h1 {
+    font-size: 3.6rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--dark);
+    letter-spacing: -1.5px;
+}
+
+.hero h1 span {
+    color: var(--primary);
+}
+
+.hero p {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 650px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border: none;
+    border-radius: 10px;
+    padding: 11px 22px;
+    font-weight: 700;
+    box-shadow: 0 7px 18px rgba(99, 102, 241, 0.22);
+    transition: all 0.25s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    transform: translateY(-2px);
+    box-shadow: 0 11px 25px rgba(99, 102, 241, 0.3);
+}
+
+.btn-outline-primary {
+    border: 1.5px solid var(--primary);
+    color: var(--primary);
+    border-radius: 10px;
+    padding: 10px 21px;
+    font-weight: 700;
+    transition: all 0.25s ease;
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+    transition: all 0.25s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.09);
+}
+
+.stat-card h3 {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 5px;
+}
+
+.stat-card p {
+    margin: 0;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   SECTION HEADINGS
+========================================================= */
+
+.section-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.section-subtitle {
+    color: var(--muted);
+    max-width: 700px;
+    margin: auto;
+}
+
+
+/* =========================================================
+   CATEGORY CARDS
+========================================================= */
+
+.category-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.category-card:hover {
+    transform: translateY(-7px);
+    border-color: #c7d2fe;
+    box-shadow: 0 15px 35px rgba(99, 102, 241, 0.1);
+}
+
+.category-card i {
+    display: inline-flex;
+    width: 60px;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: #eef2ff;
+    color: var(--primary);
+    font-size: 27px;
+    margin-bottom: 15px;
+}
+
+.category-card h5 {
+    font-weight: 700;
+    color: var(--dark);
+}
+
+
+/* =========================================================
+   FREELANCER CARDS
+========================================================= */
+
+.freelancer-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 25px;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.freelancer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+}
+
+.freelancer-avatar {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.freelancer-name {
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.freelancer-role {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   JOB CARDS
+========================================================= */
+
+.job-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+}
+
+.job-card h5 {
+    color: var(--dark);
+    font-weight: 800;
+}
+
+.job-card p {
+    color: var(--muted);
+}
+
+.job-budget {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--success);
+}
+
+.job-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.job-skill {
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #eef2ff;
+    color: #4f46e5;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   FORMS
+========================================================= */
+
+.form-control,
+.form-select {
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 11px 13px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.form-label {
+    font-weight: 700;
+    color: var(--dark);
+}
+
+
+/* =========================================================
+   AUTH PAGES
+========================================================= */
+
+.auth-container {
+    min-height: calc(100vh - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 15px;
+    background: #f8fafc;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 15px 40px rgba(15, 23, 42, 0.08);
+}
+
+.auth-card h2 {
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.auth-logo {
+    width: 55px;
+    height: 55px;
+    margin: auto;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    font-size: 25px;
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.dashboard-header {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 20px;
+    padding: 35px;
+    color: white;
+    margin-bottom: 30px;
+}
+
+.dashboard-header h1 {
+    font-weight: 800;
+}
+
+.dashboard-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================================================
+   TABLES
+========================================================= */
+
+.table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background: #f8fafc;
+    color: var(--dark);
+    font-weight: 800;
+    border-bottom: 1px solid var(--border);
+}
+
+.table tbody td {
+    vertical-align: middle;
+}
+
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.alert {
+    border-radius: 12px;
+    border: none;
+}
+
+.alert-success {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.alert-danger {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.alert-warning {
+    background: #fffbeb;
+    color: #b45309;
+}
+
+.alert-info {
+    background: #eff6ff;
+    color: #0369a1;
+}
+
+
+/* =========================================================
+   BADGES / STATUS
+========================================================= */
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 11px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-pending {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.status-accepted {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.status-rejected {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-box {
+    position: relative;
+}
+
+.search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+}
+
+.search-box input {
+    padding-left: 42px;
+}
+
+
+/* =========================================================
+   RATINGS
+========================================================= */
+
+.rating {
+    color: #f59e0b;
+}
+
+.rating i {
+    margin-right: 2px;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.hh-main {
+    min-height: 70vh;
+}
+
+
+/* =========================================================
+   FLASH MESSAGES
+========================================================= */
+
+.hh-flash-container {
+    max-width: 1200px;
+    margin: 20px auto 0;
+    padding: 0 20px;
+}
+
+.hh-flash-container .alert {
+    margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.hh-footer {
+    margin-top: 60px;
+    background: #111827;
+    color: #d1d5db;
+    padding: 50px 20px 20px;
+}
+
+.hh-footer-container {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 40px;
+}
+
+.hh-footer-brand h4 {
+    color: white;
+    font-weight: 800;
+}
+
+.hh-footer-brand p {
+    color: #9ca3af;
+    max-width: 400px;
+}
+
+.hh-footer-links h5 {
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.hh-footer-links a {
+    display: block;
+    color: #9ca3af;
+    margin-bottom: 9px;
+    transition: 0.2s ease;
+}
+
+.hh-footer-links a:hover {
+    color: white;
+}
+
+.hh-footer-bottom {
+    max-width: 1200px;
+    margin: 35px auto 0;
+    padding-top: 20px;
+    border-top: 1px solid #374151;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-up {
+    animation: fadeUp 0.6s ease forwards;
+}
+
+
+/* =========================================================
+   RESPONSIVE NAVBAR
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .hh-nav-container {
+        flex-wrap: wrap;
+        padding: 12px 18px;
+    }
+
+    .hh-mobile-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        order: 2;
+    }
+
+    .hh-nav-menu {
+        display: none;
+        width: 100%;
+        order: 4;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px 0;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .hh-nav-menu.hh-menu-open {
+        display: flex;
+    }
+
+    .hh-nav-link {
+        width: 100%;
+        padding: 12px 14px;
+    }
+
+    .hh-nav-actions {
+        margin-left: 0;
+        order: 3;
+    }
+
+    .hh-user-pill {
+        display: none;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+    }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .hero {
+        min-height: 560px;
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 2.7rem;
+    }
+
+    .hero p {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hh-footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .auth-card {
+        padding: 28px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .hh-nav-container {
+        gap: 10px;
+    }
+
+    .hh-logo-text {
+        font-size: 21px;
+    }
+
+    .hh-logo-icon {
+        width: 38px;
+        height: 38px;
+    }
+
+    .hh-nav-actions {
+        gap: 5px;
+    }
+
+    .hh-login-btn,
+    .hh-register-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .hero {
+        min-height: 500px;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+        letter-spacing: -0.8px;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .btn-primary,
+    .btn-outline-primary {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .stat-card {
+        margin-bottom: 15px;
+    }
+
+    .hh-footer-container {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .auth-card {
+        padding: 22px;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+}
+
+
+/* =========================================================
+   EXTRA SMALL DEVICES
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .hh-nav-container {
+        padding: 10px 12px;
+    }
+
+    .hh-logo-text {
+        font-size: 19px;
+    }
+
+    .hh-logo-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+
+    .hh-login-btn,
+    .hh-register-btn {
+        padding: 7px 9px;
+        font-size: 12px;
+    }
+
+    .hh-mobile-toggle {
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+}

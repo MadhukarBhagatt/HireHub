@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Analytics - HireHub</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <style>
+
+        body {
+            background: #f5f7fb;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .page-header {
+            margin-top: 40px;
+            margin-bottom: 35px;
+        }
+
+        .page-header h1 {
+            font-weight: bold;
+        }
+
+        .stat-card {
+            border: none;
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .analytics-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .analytics-card .card-body {
+            padding: 25px;
+        }
+
+        .management-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+            transition: 0.2s;
+        }
+
+        .management-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .management-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .rating-stars {
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+
+        .freelancer-table {
+            vertical-align: middle;
+        }
+
+        .rank-badge {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .empty-box {
+            padding: 30px;
+            text-align: center;
+            color: #777;
+        }
+
+        canvas {
+            max-height: 300px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar navbar-dark bg-dark">
+
+    <div class="container">
+
+        <a
+            class="navbar-brand"
+            href="{{ url_for('dashboard') }}">
+
+            💼 HireHub Admin
+
+        </a>
+
+
+        <div class="d-flex align-items-center">
+
+            <span class="text-white me-3">
+
+                👑 Welcome, {{ session["name"] }}
+
+            </span>
+
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="btn btn-danger">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="container mt-5">
+
+
+    <!-- =========================
+         FLASH MESSAGES
+    ========================= -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div
+                    class="alert alert-{{ category }} alert-dismissible fade show"
+                    role="alert">
+
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+
+    <!-- =========================
+         PAGE HEADER
+    ========================= -->
+
+    <div class="page-header">
+
+        <h1>
+            👑 Admin Dashboard
+        </h1>
+
+        <p class="text-muted">
+
+            Monitor and manage the complete HireHub platform.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- =========================
+         STATISTICS
+    ========================= -->
+
+    <div class="row g-4">
+
+
+        <!-- USERS -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card stat-card border-primary">
+
+                <div class="card-body text-center">
+
+                    <h5>
+                        👥 Total Users
+                    </h5>
+
+                    <div class="stat-number text-primary">
+
+                        {{ total_users }}
+
+                    </div>
+
+                    <p class="text-muted mb-0">
+
+                        Registered users
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CLIENTS -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card stat-card border-success">
+
+                <div class="card-body text-center">
+
+                    <h5>
+                        🏢 Clients
+                    </h5>
+
+                    <div class="stat-number text-success">
+
+                        {{ total_clients }}
+
+                    </div>
+
+                    <p class="text-muted mb-0">
+
+                        Active clients
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FREELANCERS -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card stat-card border-info">
+
+                <div class="card-body text-center">
+
+                    <h5>
+                        👨‍💻 Freelancers
+                    </h5>
+
+                    <div class="stat-number text-info">
+
+                        {{ total_freelancers }}
+
+                    </div>
+
+                    <p class="text-muted mb-0">
+
+                        Registered freelancers
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- JOBS -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card stat-card border-warning">
+
+                <div class="card-body text-center">
+
+                    <h5>
+                        💼 Jobs
+                    </h5>
+
+                    <div class="stat-number text-warning">
+
+                        {{ total_jobs }}
+
+                    </div>
+
+                    <p class="text-muted mb-0">
+
+                        Posted jobs
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- APPLICATIONS CARD -->
+
+    <div class="row g-4 mt-1">
+
+        <div class="col-md-12">
+
+            <div class="card stat-card border-danger">
+
+                <div class="card-body text-center">
+
+                    <h5>
+                        📄 Total Applications
+                    </h5>
+
+                    <div class="stat-number text-danger">
+
+                        {{ total_applications }}
+
+                    </div>
+
+                    <p class="text-muted mb-0">
+
+                        Applications submitted by freelancers
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         ANALYTICS
+    ========================= -->
+
+    <h2 class="mt-5 mb-4">
+
+        📊 Platform Analytics
+
+    </h2>
+
+
+    <div class="row g-4">
+
+
+        <!-- USERS BY ROLE -->
+
+        <div class="col-lg-4">
+
+            <div class="card analytics-card h-100">
+
+                <div class="card-body">
+
+                    <h5 class="text-center mb-4">
+
+                        👥 Users by Role
+
+                    </h5>
+
+                    <canvas id="userRoleChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- JOB STATUS -->
+
+        <div class="col-lg-4">
+
+            <div class="card analytics-card h-100">
+
+                <div class="card-body">
+
+                    <h5 class="text-center mb-4">
+
+                        💼 Jobs by Status
+
+                    </h5>
+
+                    <canvas id="jobStatusChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- APPLICATION STATUS -->
+
+        <div class="col-lg-4">
+
+            <div class="card analytics-card h-100">
+
+                <div class="card-body">
+
+                    <h5 class="text-center mb-4">
+
+                        📄 Applications by Status
+
+                    </h5>
+
+                    <canvas id="applicationStatusChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         SECOND ANALYTICS ROW
+    ========================= -->
+
+    <div class="row g-4 mt-1">
+
+
+        <!-- JOB CATEGORIES -->
+
+        <div class="col-lg-6">
+
+            <div class="card analytics-card h-100">
+
+                <div class="card-body">
+
+                    <h5 class="text-center mb-4">
+
+                        📂 Jobs by Category
+
+                    </h5>
+
+                    {% if job_category_data %}
+
+                        <canvas id="jobCategoryChart"></canvas>
+
+                    {% else %}
+
+                        <div class="empty-box">
+
+                            📭 No job category data available.
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TOP FREELANCERS -->
+
+        <div class="col-lg-6">
+
+            <div class="card analytics-card h-100">
+
+                <div class="card-body">
+
+                    <h5 class="mb-4">
+
+                        ⭐ Top Rated Freelancers
+
+                    </h5>
+
+
+                    {% if top_freelancers %}
+
+                    <div class="table-responsive">
+
+                        <table class="table freelancer-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>#</th>
+
+                                    <th>Freelancer</th>
+
+                                    <th>Rating</th>
+
+                                    <th>Reviews</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for freelancer in top_freelancers %}
+
+                                <tr>
+
+                                    <td>
+
+                                        <span class="rank-badge bg-light">
+
+                                            {{ loop.index }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <strong>
+
+                                            {{ freelancer.name }}
+
+                                        </strong>
+
+                                        <br>
+
+                                        <small class="text-muted">
+
+                                            {{ freelancer.email }}
+
+                                        </small>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="rating-stars">
+
+                                            {% if freelancer.average_rating >= 1 %}★{% else %}☆{% endif %}
+                                            {% if freelancer.average_rating >= 2 %}★{% else %}☆{% endif %}
+                                            {% if freelancer.average_rating >= 3 %}★{% else %}☆{% endif %}
+                                            {% if freelancer.average_rating >= 4 %}★{% else %}☆{% endif %}
+                                            {% if freelancer.average_rating >= 5 %}★{% else %}☆{% endif %}
+
+                                        </span>
+
+                                        <br>
+
+                                        <strong>
+
+                                            {{ freelancer.average_rating }}/5
+
+                                        </strong>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {{ freelancer.total_reviews }}
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    {% else %}
+
+                        <div class="empty-box">
+
+                            ⭐ No freelancer ratings available yet.
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         ADMIN MANAGEMENT
+    ========================= -->
+
+    <h2 class="mt-5 mb-4">
+
+        ⚙️ Admin Management
+
+    </h2>
+
+
+    <div class="row g-4">
+
+
+        <!-- MANAGE USERS -->
+
+        <div class="col-lg-4">
+
+            <div class="card management-card h-100">
+
+                <div class="card-body text-center">
+
+                    <div class="management-icon">
+
+                        👥
+
+                    </div>
+
+                    <h4>
+
+                        Manage Users
+
+                    </h4>
+
+                    <p class="text-muted">
+
+                        View and manage registered clients
+                        and freelancers.
+
+                    </p>
+
+                    <a
+                        href="{{ url_for('admin_users') }}"
+                        class="btn btn-primary">
+
+                        👥 Manage Users
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- MANAGE JOBS -->
+
+        <div class="col-lg-4">
+
+            <div class="card management-card h-100">
+
+                <div class="card-body text-center">
+
+                    <div class="management-icon">
+
+                        💼
+
+                    </div>
+
+                    <h4>
+
+                        Manage Jobs
+
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Monitor and manage jobs posted
+                        by clients.
+
+                    </p>
+
+                    <a
+                        href="{{ url_for('admin_jobs') }}"
+                        class="btn btn-success">
+
+                        💼 Manage Jobs
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- APPLICATIONS -->
+
+        <div class="col-lg-4">
+
+            <div class="card management-card h-100">
+
+                <div class="card-body text-center">
+
+                    <div class="management-icon">
+
+                        📄
+
+                    </div>
+
+                    <h4>
+
+                        Applications
+
+                    </h4>
+
+                    <p class="text-muted">
+
+                        View all applications submitted
+                        on HireHub.
+
+                    </p>
+
+                    <a
+                        href="{{ url_for('admin_applications') }}"
+                        class="btn btn-info">
+
+                        📄 Applications
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================
+     FLASK CHART DATA
+========================= -->
+
+<script id="userRoleData" type="application/json">
+    {{ user_role_data | tojson }}
+</script>
+
+<script id="jobStatusData" type="application/json">
+    {{ job_status_data | tojson }}
+</script>
+
+<script id="applicationStatusData" type="application/json">
+    {{ application_status_data | tojson }}
+</script>
+
+<script id="jobCategoryData" type="application/json">
+    {{ job_category_data | tojson }}
+</script>
+
+<!-- =========================
+     CHART.JS
+========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+
+    // =========================
+    // LOAD DATA
+    // =========================
+
+    const userRoleData = JSON.parse(
+        document.getElementById("userRoleData").textContent
+    );
+
+    const jobStatusData = JSON.parse(
+        document.getElementById("jobStatusData").textContent
+    );
+
+    const applicationStatusData = JSON.parse(
+        document.getElementById("applicationStatusData").textContent
+    );
+
+    const jobCategoryData = JSON.parse(
+        document.getElementById("jobCategoryData").textContent
+    );
+
+
+    // =========================
+    // USERS BY ROLE
+    // =========================
+
+    new Chart(
+
+        document.getElementById("userRoleChart"),
+
+        {
+            type: "doughnut",
+
+            data: {
+
+                labels: userRoleData.map(
+                    item => item.role
+                ),
+
+                datasets: [
+
+                    {
+                        label: "Users",
+
+                        data: userRoleData.map(
+                            item => item.total
+                        )
+                    }
+
+                ]
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+                        position: "bottom"
+                    }
+
+                }
+
+            }
+
+        }
+
+    );
+
+
+    // =========================
+    // JOB STATUS
+    // =========================
+
+    new Chart(
+
+        document.getElementById("jobStatusChart"),
+
+        {
+            type: "bar",
+
+            data: {
+
+                labels: jobStatusData.map(
+                    item => item.status
+                ),
+
+                datasets: [
+
+                    {
+                        label: "Jobs",
+
+                        data: jobStatusData.map(
+                            item => item.total
+                        )
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+                            stepSize: 1
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    );
+
+
+    // =========================
+    // APPLICATION STATUS
+    // =========================
+
+    new Chart(
+
+        document.getElementById("applicationStatusChart"),
+
+        {
+            type: "pie",
+
+            data: {
+
+                labels: applicationStatusData.map(
+                    item => item.status
+                ),
+
+                datasets: [
+
+                    {
+                        label: "Applications",
+
+                        data: applicationStatusData.map(
+                            item => item.total
+                        )
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+                        position: "bottom"
+                    }
+
+                }
+
+            }
+
+        }
+
+    );
+
+
+    // =========================
+    // JOB CATEGORY
+    // =========================
+
+    const categoryCanvas =
+        document.getElementById("jobCategoryChart");
+
+
+    if (categoryCanvas && jobCategoryData.length > 0) {
+
+        new Chart(
+
+            categoryCanvas,
+
+            {
+                type: "doughnut",
+
+                data: {
+
+                    labels: jobCategoryData.map(
+                        item => item.category
+                    ),
+
+                    datasets: [
+
+                        {
+                            label: "Jobs",
+
+                            data: jobCategoryData.map(
+                                item => item.total
+                            )
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    plugins: {
+
+                        legend: {
+                            position: "bottom"
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

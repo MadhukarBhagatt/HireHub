@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Find Freelancers - HireHub</title>
+
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+
+    <!-- HireHub CSS -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}">
+
+
+    <style>
+
+        body {
+            background: #f5f7fb;
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .freelancer-header {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            padding: 45px 0;
+            margin-bottom: 35px;
+        }
+
+
+        /* =========================
+           SEARCH CARD
+        ========================= */
+
+        .search-card {
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+
+        /* =========================
+           FREELANCER CARD
+        ========================= */
+
+        .freelancer-card {
+            background: white;
+            border: none;
+            border-radius: 18px;
+            padding: 25px;
+            height: 100%;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+            transition: 0.25s;
+        }
+
+
+        .freelancer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+
+
+        /* PROFILE ICON */
+
+        .profile-icon {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: #e8f0ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+
+        .freelancer-name {
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+
+        /* SKILLS BOX */
+
+        .skills-box {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+
+        /* ROLE BADGE */
+
+        .role-badge {
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+
+        /* SEARCH INPUT */
+
+        .form-control {
+            padding: 11px;
+            border-radius: 8px;
+        }
+
+
+        .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.15);
+        }
+
+
+        /* EMPTY RESULTS */
+
+        .no-results {
+            background: white;
+            border-radius: 18px;
+            padding: 55px 25px;
+            text-align: center;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+
+        .no-results-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+
+        @media (max-width: 768px) {
+
+            .freelancer-header {
+                padding: 35px 0;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar navbar-dark bg-dark">
+
+    <div class="container">
+
+
+        <a
+            class="navbar-brand fw-bold"
+            href="{{ url_for('home') }}">
+
+            💼 HireHub
+
+        </a>
+
+
+        <div class="d-flex align-items-center">
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="btn btn-outline-light me-2">
+
+                Dashboard
+
+            </a>
+
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="btn btn-danger">
+
+                Logout
+
+            </a>
+
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================
+     PAGE HEADER
+========================= -->
+
+<section class="freelancer-header">
+
+    <div class="container text-center">
+
+
+        <h1 class="fw-bold">
+
+            👥 Find the Right Freelancer
+
+        </h1>
+
+
+        <p class="fs-5 mb-0">
+
+            Discover talented professionals for your projects.
+
+        </p>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="container pb-5">
+
+
+    <!-- =========================
+         SEARCH FORM
+    ========================= -->
+
+    <div class="card search-card mb-5">
+
+        <div class="card-body p-4">
+
+
+            <h4 class="mb-4">
+
+                🔎 Search Freelancers
+
+            </h4>
+
+
+            <form
+                method="GET"
+                action="{{ url_for('find_freelancer') }}">
+
+
+                <div class="row g-3">
+
+
+                    <!-- SEARCH -->
+
+                    <div class="col-md-8">
+
+
+                        <label class="form-label fw-semibold">
+
+                            Name or Skills
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="search"
+                            class="form-control"
+                            placeholder="Example: Rahul or Python"
+                            value="{{ search }}">
+
+
+                    </div>
+
+
+
+                    <!-- SEARCH BUTTON -->
+
+                    <div
+                        class="col-md-2 d-flex align-items-end">
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100">
+
+                            🔍 Search
+
+                        </button>
+
+
+                    </div>
+
+
+
+                    <!-- CLEAR BUTTON -->
+
+                    <div
+                        class="col-md-2 d-flex align-items-end">
+
+
+                        <a
+                            href="{{ url_for('find_freelancer') }}"
+                            class="btn btn-outline-secondary w-100">
+
+                            Clear
+
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         RESULTS TITLE
+    ========================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+
+        <div>
+
+
+            <h3 class="mb-1">
+
+                Available Freelancers
+
+            </h3>
+
+
+            <p class="text-muted mb-0">
+
+                {{ freelancers|length }} freelancer(s) found
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         FREELANCER LIST
+    ========================= -->
+
+    {% if freelancers %}
+
+
+        <div class="row g-4">
+
+
+            {% for freelancer in freelancers %}
+
+
+                <div class="col-lg-4 col-md-6">
+
+
+                    <div class="freelancer-card">
+
+
+                        <!-- PROFILE ICON -->
+
+                        <div class="profile-icon">
+
+                            👤
+
+                        </div>
+
+
+
+                        <!-- NAME -->
+
+                        <h4 class="freelancer-name">
+
+                            {{ freelancer.name }}
+
+                        </h4>
+
+
+
+                        <!-- ROLE -->
+
+                        <span
+                            class="badge bg-success role-badge">
+
+                            👨‍💻 Freelancer
+
+                        </span>
+
+
+
+                        <!-- EMAIL -->
+
+                        <p class="text-muted mt-3 mb-2">
+
+                            📧 {{ freelancer.email }}
+
+                        </p>
+
+
+
+                        <!-- SKILLS -->
+
+                        <div class="skills-box">
+
+
+                            <strong>
+
+                                🛠 Skills
+
+                            </strong>
+
+
+                            <p class="mb-0 mt-2">
+
+                                {{ freelancer.skills or "No skills added yet." }}
+
+                            </p>
+
+
+                        </div>
+
+                        <!-- RATING -->
+
+                        <div class="mt-3">
+
+                            <strong>
+                                ⭐ Rating
+                            </strong>
+
+                            <p class="mb-0">
+
+                                {% if freelancer.average_rating %}
+
+                                    ⭐ {{ freelancer.average_rating }}/5
+
+                                    ({{ freelancer.total_reviews }} reviews)
+
+                                {% else %}
+
+                                    No reviews yet
+
+                                {% endif %}
+
+                            </p>
+
+                        </div>
+
+                        <!-- VIEW PROFILE -->
+
+                        <div class="mt-4">
+
+
+                            <a
+                                href="{{ url_for(
+                                    'view_freelancer',
+                                    user_id=freelancer.id
+                                ) }}"
+                                class="btn btn-primary w-100">
+
+                                👤 View Profile
+
+                            </a>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+
+    {% else %}
+
+
+        <!-- =========================
+             NO RESULTS
+        ========================= -->
+
+        <div class="no-results">
+
+
+            <div class="no-results-icon">
+
+                🔍
+
+            </div>
+
+
+            {% if search %}
+
+
+                <h3>
+
+                    No Freelancers Found
+
+                </h3>
+
+
+                <p class="text-muted">
+
+                    No freelancers matched
+
+                    <strong>
+
+                        "{{ search }}"
+
+                    </strong>
+
+                </p>
+
+
+                <a
+                    href="{{ url_for('find_freelancer') }}"
+                    class="btn btn-primary">
+
+                    View All Freelancers
+
+                </a>
+
+
+            {% else %}
+
+
+                <h3>
+
+                    No Freelancers Available
+
+                </h3>
+
+
+                <p class="text-muted">
+
+                    There are currently no registered freelancers.
+
+                </p>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+
+<!-- Bootstrap JavaScript -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>

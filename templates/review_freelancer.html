@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Rate Freelancer - HireHub</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <style>
+
+        body {
+            background: #f4f7fb;
+        }
+
+        .review-card {
+            max-width: 650px;
+            margin: 60px auto;
+            background: white;
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.10);
+        }
+
+        .star-rating {
+            direction: rtl;
+            display: inline-flex;
+            gap: 5px;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 45px;
+            color: #ccc;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffc107;
+        }
+
+        .star-rating input:checked ~ label {
+            color: #ffc107;
+        }
+
+        .freelancer-name {
+            color: #0d6efd;
+            font-weight: 700;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+
+    <div class="container">
+
+        <a class="navbar-brand fw-bold"
+           href="{{ url_for('dashboard') }}">
+
+            HireHub
+
+        </a>
+
+        <a class="btn btn-outline-light"
+           href="{{ url_for('dashboard') }}">
+
+            Dashboard
+
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <div class="review-card">
+
+        <div class="text-center mb-4">
+
+            <h2 class="fw-bold">
+                Rate Freelancer
+            </h2>
+
+            <p class="text-muted mb-1">
+                Give your feedback about
+            </p>
+
+            <h4 class="freelancer-name">
+                {{ job.freelancer_name }}
+            </h4>
+
+            <p class="text-muted">
+                Job: {{ job.title }}
+            </p>
+
+        </div>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <form method="POST">
+
+
+            <!-- RATING -->
+
+            <div class="text-center mb-4">
+
+                <label class="form-label fw-bold d-block">
+                    Your Rating
+                </label>
+
+                <div class="star-rating">
+
+                    <input
+                        type="radio"
+                        id="star5"
+                        name="rating"
+                        value="5"
+                        required>
+
+                    <label for="star5">★</label>
+
+
+                    <input
+                        type="radio"
+                        id="star4"
+                        name="rating"
+                        value="4">
+
+                    <label for="star4">★</label>
+
+
+                    <input
+                        type="radio"
+                        id="star3"
+                        name="rating"
+                        value="3">
+
+                    <label for="star3">★</label>
+
+
+                    <input
+                        type="radio"
+                        id="star2"
+                        name="rating"
+                        value="2">
+
+                    <label for="star2">★</label>
+
+
+                    <input
+                        type="radio"
+                        id="star1"
+                        name="rating"
+                        value="1">
+
+                    <label for="star1">★</label>
+
+                </div>
+
+            </div>
+
+
+            <!-- REVIEW -->
+
+            <div class="mb-4">
+
+                <label
+                    for="review"
+                    class="form-label fw-bold">
+
+                    Your Review
+
+                </label>
+
+                <textarea
+                    class="form-control"
+                    id="review"
+                    name="review"
+                    rows="5"
+                    placeholder="Write your experience with this freelancer..."></textarea>
+
+            </div>
+
+
+            <!-- BUTTON -->
+
+            <div class="d-grid">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-lg">
+
+                    ⭐ Submit Rating & Review
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+</body>
+</html>
